@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8" />
+<title>發電機電阻法 檢驗計算工具（莫蘭迪風｜數字鍵盤最終版・補T相）</title>
+<style>
+:root{
+  --m1:#f2ede7;--m2:#e6dfd7;--m3:#d8e1dc;--m4:#dce3ec;
+  --ok:#2e7d32;--ng:#c62828;--accent:#5f6f86;
+}
+body{font-family:'Segoe UI','PingFang TC','Noto Sans TC',Arial,sans-serif;margin:32px;background:#fafafa;color:#333;font-size:16px}
+h1{color:var(--accent)}
+.section{padding:24px;border-radius:14px;margin-bottom:36px}
+.section.v{background:var(--m1)}
+.section.f{background:var(--m4)}
+.section.o{background:var(--m3)}
+.section.t{background:var(--m2)}
+h2{margin-top:0;color:#3a4a5e}
+.note{font-size:14px;color:#555;margin-bottom:8px}
+label{display:block;margin-top:10px}
+input,select{margin-left:6px;padding:6px 8px;width:160px;font-size:16px;background:#fffbe6;border:1px solid #ccc;border-radius:6px;text-align:right}
+.result{margin-top:12px;font-weight:600;font-size:18px}
+.sub{font-size:12px;color:#666;font-weight:normal}
+table{border-collapse:collapse;width:100%;margin-top:10px}
+th,td{border:1px solid #bbb;padding:10px 12px;text-align:center}th{background:rgba(0,0,0,.05)}
+</style>
+</head>
+<body>
+<h1>發電機電阻法 檢驗計算工具</h1>
+ 
+<div class="section t">
+<h2>6. 溫升試驗（電阻法）</h2>
+<p class="note">Δt = (R2 − R1) × (234.5 + T1) / R1</p>
+<table id="resTable">
+<tr>
+<th>Item</th>
+<th>T1<br><span class="sub">起始溫度</span></th>
+<th>R1<br><span class="sub">運轉前電阻</span></th>
+<th>R2<br><span class="sub">運轉後電阻</span></th>
+<th>Δt<br><span class="sub">溫升</span></th>
+</tr>
+<tr><td>R</td><td><input type="number" inputmode="decimal" step="any" value="26.3"></td><td><input type="number" inputmode="decimal" step="any" value="47.3"></td><td><input type="number" inputmode="decimal" step="any" value="56.5"></td><td class="result"></td></tr>
+<tr><td>S</td><td><input type="number" inputmode="decimal" step="any" value="26.3"></td><td><input type="number" inputmode="decimal" step="any" value="47.3"></td><td><input type="number" inputmode="decimal" step="any" value="56.6"></td><td class="result"></td></tr>
+<tr><td>T</td><td><input type="number" inputmode="decimal" step="any" value="26.3"></td><td><input type="number" inputmode="decimal" step="any" value="47.3"></td><td><input type="number" inputmode="decimal" step="any" value="56.6"></td><td class="result"></td></tr>
+<tr><td>磁極</td><td><input type="number" inputmode="decimal" step="any" value="26.3"></td><td><input type="number" inputmode="decimal" step="any" value="20.4"></td><td><input type="number" inputmode="decimal" step="any" value="21.7"></td><td class="result"></td></tr>
+</table>
+</div>
+ 
+<script>
+function calc(){
+document.querySelectorAll('#resTable tr').forEach((r,i)=>{
+  if(i){
+   let t1=+r.children[1].children[0].value;
+   let r1=+r.children[2].children[0].value;
+   let r2=+r.children[3].children[0].value;
+   if(r1) r.children[4].textContent=((r2-r1)*(234.5+t1)/r1).toFixed(2);
+  }
+});
+}
+document.querySelectorAll('input').forEach(e=>e.addEventListener('input',calc));
+calc();
+</script>
+</body>
+</html>
