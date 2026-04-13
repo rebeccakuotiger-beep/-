@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8" />
+<title>發電機電阻法 檢驗計算工具（莫蘭迪風｜1–7完整整合・數字鍵盤・T1同步完成版）</title>
+<style>
+:root{--m1:#f2ede7;--m2:#e6dfd7;--m3:#d8e1dc;--m4:#dce3ec;--ok:#2e7d32;--ng:#c62828;--accent:#5f6f86;}
+body{font-family:'Segoe UI','PingFang TC','Noto Sans TC',Arial,sans-serif;margin:32px;background:#fafafa;color:#333;font-size:16px}
+h1{color:var(--accent)}
+.section{padding:24px;border-radius:14px;margin-bottom:36px}
+.section.v{background:var(--m1)}.section.f{background:var(--m4)}.section.o{background:var(--m3)}.section.t{background:var(--m2)}
+h2{margin-top:0;color:#3a4a5e}
+.note{font-size:14px;color:#555;margin-bottom:8px}
+label{display:block;margin-top:10px}
+input,select{margin-left:6px;padding:6px 8px;width:160px;font-size:16px;background:#fffbe6;border:1px solid #ccc;border-radius:6px;text-align:right}
+.result{margin-top:12px;font-weight:600;font-size:18px}
+.label{color:#555;margin-right:6px}
+.judge.ok{color:var(--ok);margin-left:8px}.judge.ng{color:var(--ng);margin-left:8px}
+.sub{font-size:12px;color:#666;font-weight:normal}
+.grid{margin-top:6px;font-size:14px;color:#465a73}
+table{border-collapse:collapse;width:100%;margin-top:10px}
+th,td{border:1px solid #bbb;padding:10px 12px;text-align:center}th{background:rgba(0,0,0,.05)}
+</style>
+</head>
+<body>
+<h1>發電機電阻法 檢驗計算工具</h1>
+
+<!-- 1 -->
+<div class="section v">
+<h2>1. 電壓容許變動率（PF = 0.8）</h2>
+<p class="note">(Vo − Vf) / Vf × 100</p>
+<label>Vo：<input type="number" inputmode="decimal" step="any" id="vo1" value="383.8"></label>
+<label>Vf：<input type="number" inputmode="decimal" step="any" id="vf1" value="363.8"></label>
+<div class="result"><span class="label">電壓變動率：</span><span id="r1v"></span><span id="r1j" class="judge"></span></div>
+</div>
+
+<!-- 2 -->
+<div class="section v">
+<h2>2. 瞬時電壓變動率（PF = 0.8）</h2>
+<p class="note">(Vmax − Vf) / Vf × 100</p>
+<label>額定電壓：<select id="rated2"><option>220</option><option selected>380</option><option>440</option><option>460</option></select></label>
+<label>Vmax：<input type="number" inputmode="decimal" step="any" id="vmax" value="448.6"></label>
+<label>Vf：<input type="number" inputmode="decimal" step="any" id="vf2" value="382.7"></label>
+<div class="grid" id="range2"></div>
+<div class="result"><span class="label">瞬時電壓變動率：</span><span id="r2v"></span><span id="r2j" class="judge"></span></div>
+</div>
+
+<!-- 3 -->
+<div class="section v">
+<h2>3. 瞬時電壓變動率（PF = 0.4）</h2>
+<p class="note">(Vo − Vmin) / Vo × 100</p>
+<label>額定電壓：<select id="rated3"><option>220</option><option selected>380</option><option>440</option><option>460</option></select></label>
+<label>Vo：<input type="number" inputmode="decimal" step="any" id="vo3" value="383.8"></label>
+<label>Vmin：<input type="number" inputmode="decimal" step="any" id="vmin" value="309.8"></label>
+<div class="grid" id="range3"></div>
+<div class="result"><span class="label">瞬時電壓變動率：</span><span id="r3v"></span><span id="r3j" class="judge"></span></div>
+</div>
+
+<!-- 4 -->
+<div class="section f">
+<h2>4. 頻率容許變動率（PF = 0.8）</h2>
+<p class="note">(Fo − Ff) / Ff × 100</p>
+<label>Fo：<input type="number" inputmode="decimal" step="any" id="fo" value="60.01"></label>
+<label>Ff：<input type="number" inputmode="decimal" step="any" id="ff" value="60.01"></label>
+<div class="result"><span class="label">頻率變動率：</span><span id="r4v"></span><span id="r4j" class="judge"></span></div>
+</div>
+
+<!-- 5 -->
+<div class="section o">
+<h2>5. 超速頻率</h2>
+<table>
+<tr><th>項目</th><th>頻率</th><th>百分比</th></tr>
+<tr><td>超速頻率</td><td><input type="number" inputmode="decimal" step="any" id="overspeedFreq" value="60.01"></td><td class="result" id="osv"></td></tr>
+</table>
+<p class="note">頻率 / 60 × 100</p>
+</div>
+
+<!-- 6 -->
+<div class="section t">
+<h2>6. 溫升試驗（電阻法）</h2>
+<p class="note">Δt = (R2 − R1) × (234.5 + T1) / R1</p>
+<table id="resTable">
+<tr>
+<th>Item</th>
+<th>T1<br><span class="sub">起始溫度</span></th>
+<th>R1</th>
+<th>R2</th>
+<th>Δt</th>
+</tr>
+<tr><td>R</td><td><input class="t1-sync" type="number" inputmode="decimal" step="any" value="26.3"></td><td><input type="number" inputmode="decimal" step="any" value="47.3"></td><td><input type="number" inputmode="decimal" step="any" value="56.5"></td><td class="result"></td></tr>
+<tr><td>S</td><td><input class="t1-sync" type="number" inputmode="decimal" step="any" value="26.3"></td><td><input type="number" inputmode="decimal" step="any" value="47.3"></td><td><input type="number" inputmode="decimal" step="any" value="56.6"></td><td class="result"></td></tr>
+<tr><td>T</td><td><input class="t1-sync" type="number" inputmode="decimal" step="any" value="26.3"></td><td><input type="number" inputmode="decimal" step="any" value="47.3"></td><td><input type="number" inputmode="decimal" step="any" value="56.6"></td><td class="result"></td></tr>
+<tr><td>磁極</td><td><input class="t1-sync" type="number" inputmode="decimal" step="any" value="26.3"></td><td><input type="number" inputmode="decimal" step="any" value="20.4"></td><td><input type="number" inputmode="decimal" step="any" value="21.7"></td><td class="result"></td></tr>
+</table>
+</div>
+
+<!-- 7 -->
+<div class="section t">
+<h2>7. 溫升試驗（溫度法）</h2>
+<p class="note">Δt = T2 − T1</p>
+<table id="tempTable">
+<tr><th>Item</th><th>T1</th><th>T2</th><th>Δt</th></tr>
+<tr><td>電樞</td><td><input type="number" inputmode="decimal" step="any" value="26.3"></td><td><input type="number" inputmode="decimal" step="any" value="35.1"></td><td class="result"></td></tr>
+<tr><td>磁極</td><td><input type="number" inputmode="decimal" step="any" value="25.7"></td><td><input type="number" inputmode="decimal" step="any" value="33.3"></td><td class="result"></td></tr>
+<tr><td>軸承</td><td><input type="number" inputmode="decimal" step="any" value="26.2"></td><td><input type="number" inputmode="decimal" step="any" value="34.7"></td><td class="result"></td></tr>
+</table>
+</div>
+
+<script>
+function setJudge(el,ok){el.textContent=ok?'✅ 合格':'❌ 不合格';el.className='judge '+(ok?'ok':'ng')}
+function calc(){
+ if(vf1.value){let v=(+vo1.value-+vf1.value)/+vf1.value*100;r1v.textContent=v.toFixed(2)+' %';setJudge(r1j,Math.abs(v)<=2.5)}
+ let rv2=+rated2.value;range2.textContent=`97%=${(rv2*0.97).toFixed(1)}V，103%=${(rv2*1.03).toFixed(1)}V`;
+ if(vf2.value){let v=(+vmax.value-+vf2.value)/+vf2.value*100;r2v.textContent=v.toFixed(2)+' %';setJudge(r2j,Math.abs(v)<=30)}
+ let rv3=+rated3.value;range3.textContent=`97.5%=${(rv3*0.975).toFixed(1)}V，102.5%=${(rv3*1.025).toFixed(1)}V`;
+ if(vo3.value){let v=(+vo3.value-+vmin.value)/+vo3.value*100;r3v.textContent=v.toFixed(2)+' %';setJudge(r3j,Math.abs(v)<=25)}
+ if(ff.value){let v=(+fo.value-+ff.value)/+ff.value*100;r4v.textContent=v.toFixed(3)+' %';setJudge(r4j,Math.abs(v)<=5)}
+ osv.textContent=(+overspeedFreq.value/60*100).toFixed(2)+' %';
+ document.querySelectorAll('#resTable tr').forEach((r,i)=>{if(i){let t1=+r.children[1].children[0].value,r1=+r.children[2].children[0].value,r2=+r.children[3].children[0].value;if(r1)r.children[4].textContent=((r2-r1)*(234.5+t1)/r1).toFixed(2)}});
+ document.querySelectorAll('#tempTable tr').forEach((r,i)=>{if(i){let t1=+r.children[1].children[0].value,t2=+r.children[2].children[0].value;r.children[3].textContent=(t2-t1).toFixed(1)}});
+}
+
+// ✅ T1 同步
+ document.querySelectorAll('.t1-sync').forEach(input=>{
+  input.addEventListener('input',()=>{
+    document.querySelectorAll('.t1-sync').forEach(o=>{if(o!==input)o.value=input.value});
+    calc();
+  });
+ });
+
+document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',calc));
+calc();
+</script>
+</body>
+</html>
